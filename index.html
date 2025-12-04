@@ -122,6 +122,11 @@
         const otpauthString = inputElement.value.trim();
         const defaultPeriod = 30; // Default period if not specified
 
+        const url = new URL(window.location);
+        url.searchParams.set('code', otpauthString);
+
+        history.pushState({}, '', url);
+
         if (!otpauthString) {
           codeElement.textContent = 'Enter String';
           codeElement.classList.add('text-danger');
@@ -189,6 +194,11 @@
       }
 
       inputElement.addEventListener('keyup', generateTotpCode);
+      const code = new URL(window.location).searchParams.get('code');
+      if (code !== null && code.length > 0) {
+        inputElement.value = decodeURIComponent(code);
+        generateTotpCode();
+      }
     </script>
   </body>
 </html>
