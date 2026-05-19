@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -132,6 +132,7 @@
           codeElement.classList.add('text-danger');
           codeElement.classList.remove('text-success');
           progressBar.style.transform = 'scaleX(0)'; // Reset bar
+          document.title = 'TOTP Code Generator (Auto-Refresh)';
           return;
         }
 
@@ -144,9 +145,15 @@
 
           // 2. Generate the token
           const token = totp.generate();
+          const mid = Math.floor(token.length / 2);
 
-          // 3. Display the token
-          codeElement.textContent = token.replace(/(\d{3})(\d{3})/, '$1 $2'); // Add space for readability
+          // 3. Display the token with visual separation (CSS margin) instead of a space character.
+          // This ensures that copying the code does not include a space.
+          codeElement.innerHTML = `<span>${token.slice(0, mid)}</span><span class="ms-3">${token.slice(mid)}</span>`;
+
+          // Update the document title with the code and label
+          document.title = `${totp.label}: ${token} TOTP Code Generator (Auto-Refresh)`;
+
           codeElement.classList.remove('text-danger');
           codeElement.classList.add('text-success');
 
@@ -177,6 +184,7 @@
           codeElement.classList.add('text-danger');
           codeElement.classList.remove('text-success');
           progressBar.style.transform = 'scaleX(0)'; // Reset bar
+          document.title = 'TOTP Code Generator (Auto-Refresh)';
           console.error('Error parsing or generating code:', error.message);
         }
       }
@@ -191,6 +199,7 @@
         codeElement.classList.remove('text-danger');
         codeElement.classList.add('text-success');
         progressBar.style.transform = 'scaleX(0)'; // Reset bar
+        document.title = 'TOTP Code Generator (Auto-Refresh)';
       }
 
       inputElement.addEventListener('keyup', generateTotpCode);
